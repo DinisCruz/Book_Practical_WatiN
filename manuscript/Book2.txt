@@ -1,0 +1,18 @@
+Book2.txt
+
+O2-Platform-support-for-WebGoat.md
+
+o2platformscripttocreatetwitteraccountswithcaptchasupport.txt
+
+packagingano2platformscriptasastandalonetoolinthiscasethewatinbasediescripttool.txt
+writinganieautomationscripttologinintoukswifiusingo2platformswatinextensionmethods.txt
+
+Finding a html link with no ID in the middle of a web page using WatiN (via IE objects and jQuery).md
+
+writingreplscriptsonsidebysidechromeandie.txt
+july2013.txt
+MVC ModelBinding Vulnerability in Contoso University sample (first raw PoC).md
+august2013.txt
+usingcapturedaccountdetailsonloginform.txt
+
+E2E testing AngularJS links and routes using NCrunch, VisualStudio and FluentSharp.WatiN.md

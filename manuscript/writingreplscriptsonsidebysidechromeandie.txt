@@ -1,0 +1,69 @@
+##  Writing REPL scripts on side-by-side Chrome and IE 
+
+Following the Chrome-Hijacking posts, I'm starting to convert the WatiN Extension methods into ChromeDriver, and to do so needed to execute requests side-by-side (to test the APIs and to be able to write UnitTests for them).
+
+To do that (side-by-side Chrome and IE execution) I wrote this script:  
+  
+
+    
+    //var topPanel = panel.add_Panel(true);   
+    var topPanel = "Util - REPL IE (native) and Chrome (hijacked window)".popupWindow(1200,600);  
+    var browsersPanel = topPanel.insert_Above();     
+    var ie        = browsersPanel.title("IE").add_IE();     
+    var chrome = browsersPanel.insert_Right().add_Chrome();
+
+var repl = topPanel.add_Script();  
+repl.add_InvocationParameter("ie", ie);  
+repl.add_InvocationParameter("chrome", chrome);
+
+var firstScript =   
+@"chrome.open(""http://o2platform.com"");  
+ie.open(""http://o2platform.com"");
+
+//return ie;  
+return chrome;
+
+//O2Ref:" + @"WatiN.Core.1x.dll  
+//O2Ref:" + @"WebDriver.dll  
+//O2File:" + @"WatiN_IE_ExtensionMethods.cs  
+//O2File:" + @"API_Chrome_Hijack.cs  
+//O2File:" + @"API_ChromeDriver.cs  
+";  
+repl.onCompileExecuteOnce()  
+.set_Code(firstScript);  
+//chrome.open("http://o2platform.com"); 
+
+//O2Ref:WatiN.Core.1x.dll  
+//O2Ref:WebDriver.dll  
+//O2File:WatiN_IE_ExtensionMethods.cs  
+//O2File:API_Chrome_Hijack.cs  
+//O2File:API_ChromeDriver.cs  
+  
+which when executed looks like this:
+
+[![image](images/image_thumb_25255B1_25255D.png)](http://lh4.ggpht.com/-Wc_MfW6MfQk/UcgqGwVUlmI/AAAAAAAAOao/0y2PrRRpJr0/s1600-h/image%25255B5%25255D.png)
+
+For example here are both browsers opening up the 'http://whatismybrowser.com site:
+
+[![image](images/image_thumb1.png)](http://lh5.ggpht.com/-bOXT_9dAzB8/UcgqIrEStNI/AAAAAAAAOa4/6mllX8Ay0dQ/s1600-h/image%25255B2%25255D.png)
+
+We can also start to test the APIs and see if they produce equivalent results.
+
+For example, if we execute this script:  
+
+    
+    chrome.open("http://o2platform.com");  
+    ie.open("http://o2platform.com");
+
+chrome.elements().tagNames().showInfo();  
+ie.elements().tagNames().showInfo();
+
+//O2Ref:WatiN.Core.1x.dll  
+//O2Ref:WebDriver.dll  
+//O2File:WatiN_IE_ExtensionMethods.cs  
+//O2File:API_Chrome_Hijack.cs  
+//O2File:API_ChromeDriver.cs  
+  
+... we will get two popup-lists with the list of Html Tag names (as seen by each browser):
+
+[![image](images/image_thumb_25255B2_25255D1.png)](http://lh6.ggpht.com/-vqsBae9UvrE/UcgqKtqnhwI/AAAAAAAAObI/LWXp0DUsbC8/s1600-h/image%25255B8%25255D.png)

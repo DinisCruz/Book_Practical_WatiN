@@ -1,0 +1,87 @@
+##  Using captured account details on login form 
+
+This post will put in practice the data collected in [Generating an small MD5 Rainbow Table in C#](http://blog.diniscruz.com/2013/08/generating-small-md5-rainbow-table-in-c.html)  and  [Loading, parsing and consuming unstructured data (i.e. password hashes from google)](http://blog.diniscruz.com/2013/08/loading-parsing-and-consuming.html)
+
+Usually if you have access to usernames and passwords, a good test is to see if they work on the site that we are currently (legally) testing (remember that a lot of companies don't have a good sense of humor if you do do this type of automated testing on them)
+
+Let's say that we have a website that has a login page like HacmeBank:  
+  
+[![image](images/image_thumb_25255B1_25255D1.png)](http://lh6.ggpht.com/-p3AbsFIf1vw/Ugs6HL1mwsI/AAAAAAAAO8E/dcFoXwqtkRU/s1600-h/image%25255B5%25255D.png)
+
+The first step is to write a script to automate the Login process.
+
+To do that open the O2 Platform's IE Script tool:
+
+[![image](images/image_thumb_25255B11_25255D1.png)](http://lh6.ggpht.com/-X0l0cVG1Xag/Ugs6KPPGeAI/AAAAAAAAO8Q/ep5854_oiKE/s1600-h/image%25255B9%25255D.png)
+
+Delete the example that is in there, and just leave the first line and last three comments:
+
+[![image](images/image_thumb_25255B12_25255D1.png)](http://lh4.ggpht.com/-NwXKFdWAo8w/Ugs6LF6sm4I/AAAAAAAAO8k/Rs18wxwrhcM/s1600-h/image%25255B12%25255D.png)
+
+Now let's script an Login function.
+
+Use **_ie.open(_****_http://localhost:15582/HacmeBank_v2_Website/aspx/login.aspx_****_);_** to open the target page:
+
+[![image](images/image_thumb_25255B13_25255D1.png)](http://lh4.ggpht.com/-gG02rLNHa5A/Ugs6OfgnimI/AAAAAAAAO80/s0g5FVuJSgE/s1600-h/image%25255B15%25255D.png)
+
+Use **_return ie.fields();  _**to get a list of available fields (which will be shown in the Output window (bottom right)):
+
+[![image](images/image_thumb_25255B14_25255D1.png)](http://lh4.ggpht.com/-GmT-Psq6Bvo/Ugs6Poa6JFI/AAAAAAAAO9A/02B50Xg2v4A/s1600-h/image%25255B18%25255D.png)
+
+Populate the fields values using **_ie.field("txtUserName").value("aaaa");_** and **_ie.field("txtPassword").value("bbb");_**  , and get a reference to the button using **_return ie.buttons().first(); :_**  
+**_  
+_**[![image](images/image_thumb_25255B15_25255D1.png)](http://lh6.ggpht.com/-r_Iht8-OxIc/Ugs6Q5tT0BI/AAAAAAAAO9U/Plk1MkAy6d4/s1600-h/image%25255B21%25255D.png) 
+
+Click on the button:
+
+[![image](images/image_thumb_25255B16_25255D1.png)](http://lh4.ggpht.com/-dOV-DQm2WaY/Ugs6SGdQZTI/AAAAAAAAO9k/cttXSZMAYis/s1600-h/image%25255B24%25255D.png)
+
+If you are looking for a particular element, one good technique is to 'inject FirebugLite' into the page:
+
+[![image](images/image_thumb_25255B17_25255D1.png)](http://lh5.ggpht.com/-xQY_EVmDqDg/Ugs6TiEzesI/AAAAAAAAO9w/EHbgSA3I8sI/s1600-h/image%25255B27%25255D.png)
+
+... or to call the **_showElementsInTreeView _**Extension Method
+
+[![image](images/image_thumb_25255B18_25255D1.png)](http://lh5.ggpht.com/-wKsGLJSN_JE/Ugs6Wal8sYI/AAAAAAAAO-E/mxfA7NMseeM/s1600-h/image%25255B30%25255D.png) 
+
+... which will open a form like this:
+
+[![image](images/image_thumb_25255B20_25255D1.png)](http://lh5.ggpht.com/-kPpVgFXDEVQ/Ugs6Xt_zqnI/AAAAAAAAO-Q/_ryrd2kL5CU/s1600-h/image%25255B36%25255D.png)
+
+.. which can be used to find the element that has the login result (in this case **lblResult**)
+
+[![image](images/image_thumb_25255B21_25255D1.png)](http://lh6.ggpht.com/-wAciKQQqGUg/Ugs6ZdQ59BI/AAAAAAAAO-k/MO99T2PM4kI/s1600-h/image%25255B39%25255D.png)
+
+Final step in our automation of the Login Method is to wrap this code in an Lambda method:
+
+[![image](images/image_thumb_25255B23_25255D1.png)](http://lh6.ggpht.com/-m9mCvkVPF54/Ugs6arzMmAI/AAAAAAAAO-0/ccpn-BAZ6wk/s1600-h/image%25255B45%25255D.png)
+
+Let's say that we have a csv file with user account details, created for example using this script (based on the code from the previous post)
+
+[![image](images/image_thumb_25255B24_25255D1.png)](http://lh6.ggpht.com/-pMoj9EJp2bE/Ugs6bz1DSbI/AAAAAAAAO_A/F44MZtB49uA/s1600-h/image%25255B48%25255D.png)
+
+The file has this format:
+
+[![image](images/image_thumb_25255B25_25255D1.png)](http://lh4.ggpht.com/-o0VI7D5wRMo/Ugs6c6AlPqI/AAAAAAAAO_U/IjH5GOqCJYM/s1600-h/image%25255B51%25255D.png)
+
+... and was saved on the O2's temp folder:
+
+[![image](images/image_thumb_25255B26_25255D1.png)](http://lh5.ggpht.com/-ZtET0zOZqR8/Ugs6dxyCiGI/AAAAAAAAO_g/t5-2RhgaHSA/s1600-h/image%25255B54%25255D.png)
+
+Back in the HacmeBank script, we can load this data file like this:
+
+[![image](images/image_thumb_25255B27_25255D1.png)](http://lh6.ggpht.com/-ds_D4GIoUVo/Ugs6ei0YfII/AAAAAAAAO_0/HqsDJ_d7iJk/s1600-h/image%25255B57%25255D.png)
+
+Next, comment the first line and create an topPanel variable:
+
+[![image](images/image_thumb_25255B28_25255D1.png)](http://lh6.ggpht.com/-Dz2eqGUGIuA/Ugs6fpYctOI/AAAAAAAAPAA/jPMtL9CqVcE/s1600-h/image%25255B60%25255D.png)
+
+... so that we can add a DataGridView
+
+[![image](images/image_thumb_25255B29_25255D1.png)](http://lh5.ggpht.com/-5LLq6LzG5K8/Ugs6guCXLqI/AAAAAAAAPAU/-ISc8abvdTQ/s1600-h/image%25255B63%25255D.png)
+
+.. and try to login using the user data loaded from the csv file:
+
+[![image](images/image_thumb_25255B30_25255D1.png)](http://lh3.ggpht.com/-ci5kEvJu50A/Ugs6hu1lm3I/AAAAAAAAPAk/wjxV_uiKB5o/s1600-h/image%25255B66%25255D.png)
+
+**Scripts source code:**

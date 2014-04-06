@@ -1,0 +1,27 @@
+## Using WatiN as a browser automation engine
+
+When I was looking for a Browser Automation engine for [O2](http://o2platform.com/), I looked at a bunch of option (including Selenium) and ended up using [WatiN](http://watin.sourceforge.net/) which is a .NET port of [Watir](http://www.openqa.org/watir/) The result is great, specially after wrapping most WatiN functionality in O2-driven .NET Extension methods. Here is an example of an UnitTest that I wrote using WatiN (in this case the admin section VIEWSTATE password disclosure) 
+    
+    
+    [sourcecode language="csharp" wraplines="false"]
+    [Test]
+    public void vulnerability_Sensitive_Information_Disclosure_in_Admin_Section()
+    {
+        setup();
+        ie.open(StartUrl);
+        ie.field("txtUserName").value("jv").flash();
+        ie.field("txtPassword").value("jv789").flash();
+        ie.button("Submit").click();
+        ie.link("Admin Section").flash().click();                    
+    
+        var response = ie.viewState().ViewState_Values[12];
+    
+        ie.field("_ctl3:txtResponse").value(response).flash();
+        ie.button("Login").flash().click();
+    }
+    [/sourcecode]
+    
+    
+    
+
+Here [are more examples](http://o2platform.com/wiki/HacmeBank/Unit_Tests_for_Vulnerabilities) on HacmeBank and [here is a video that shows it in action](http://www.youtube.com/watch?v=T2XVufhJLig)

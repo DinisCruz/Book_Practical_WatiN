@@ -1,0 +1,18 @@
+## Trigger an Keypress event in IE
+
+Using O2's IE Automation (which is a wrapper on top of [WatiN](http://watin.org/)), if you need to trigger an Javascript event, there are a couple ways this can be done:
+
+  * **directly entering the value on the field** -  try something like: _ie.field("fieldName").value("aaa");_    depending on how the original Javascript event hook is set-up that might just do the trick
+  * **directly invoking the javascript function that handles the KeyPress - **O2 has now quite extended support for Javascript, and you can easily perform javascript invokes (and receive callbacks). See this links for more details
+
+  * [http://o2platform.wordpress.com/2011/03/08/running-javascript-in-ie-automation-environment/](http://o2platform.wordpress.com/2011/03/08/running-javascript-in-ie-automation-environment/)
+  * [http://o2platform.wordpress.com/2011/03/31/o2-script-util-javascript-object-viewer/](http://o2platform.wordpress.com/2011/03/31/o2-script-util-javascript-object-viewer/)
+  * [http://o2platform.wordpress.com/2011/03/07/o2-script-dwr-functions-viewer-and-invoker/](http://o2platform.wordpress.com/2011/03/07/o2-script-dwr-functions-viewer-and-invoker/) one note on Javascript, if you go down that route, I would advise you to first inject jQuery.js into the page and then do your manipulations (since you can write your Javascript code in jQuery which much easier) . There are already good support for jQuery in O2 which you can leverage:
+
+  * [O2 jQuery API](http://code.google.com/p/o2platform/source/browse/trunk/O2_Scripts/#O2_Scripts%2FAPIs%2F_Javascript_Libraries%2FJQuery)
+  * [Util - Simple jQuery script GUI.h2](http://code.google.com/p/o2platform/source/browse/trunk/O2_Scripts/APIs/_Javascript_Libraries/JQuery/Util%20-%20Simple%20jQuery%20script%20GUI.h2)
+  * [Util - XSS PoC Tester - Viewer.h2](http://code.google.com/p/o2platform/source/browse/trunk/O2_Scripts/_Sample_Vulnerabilities/Util%20-%20XSS%20PoC%20Tester%20-%20Viewer.h2)
+
+* **use Windows UIAutomation** - at last resort you can move the mouse to the location of the field (javascript/WatiN can help to find the screen position) , then simulate a mouse click and finally enter some text (this is basically using Windows to simulate your actions). See this script for an example on how to the use [White](http://white.codeplex.com/) API (which is the equivalent of WatiN by from Windows): [PoC - Automating Notepad.h2](http://code.google.com/p/o2platform/source/browse/trunk/O2_Scripts/APIs/Windows/White/PoC%20-%20Automating%20Notepad.h2)
+
+(this text was originally written to answer a question posted on [O2's mailing list](https://lists.owasp.org/mailman/listinfo/owasp-o2-platform))
